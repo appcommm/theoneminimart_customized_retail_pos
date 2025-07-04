@@ -1,0 +1,4 @@
+name,code,category,brand,barcode symbol,product cost,product price,product unit,sale unit,purchase unit,stock alert,order tax,tax type,note,warehouse,supplier,product quantity,status,product type,variation,variation type,variation code
+Nike Air Zoom Pegasus,001,cate,brand,CODE128,120000,200000,piece,piece,piece,10,3,EXCLUSIVE,This is testing,YGN Warehouse,Hanna,0,Ordered,Single,,
+Nike Air Jordan,002,cate,brand,CODE39,230000,350000,piece,piece,piece,10,3,INCLUSIVE,This is testing,YGN Warehouse,Cale Dibbert,0,Pending,Variation,Variation Two,Testing Two,variation001
+Nike Air Force 1,003,cate,brand,CODE128,340000,450000,piece,piece,piece,10,3,EXCLUSIVE,This is testing,YGN Warehouse,Gretchen Francis,0,Received,Single,,
