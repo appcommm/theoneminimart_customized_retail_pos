@@ -123,6 +123,8 @@ const ShowPayment = (props) => {
                                                     "Bank Transfer"}
                                                 {item.payment_type === 4 &&
                                                     "Other"}
+                                                {item.payment_type === 5 &&
+                                                    "Kpay"}
                                             </td>
                                             <td>
                                                 <Button

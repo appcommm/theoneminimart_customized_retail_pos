@@ -93,7 +93,7 @@ const ActionDropDownButton = (props) => {
                         {getFormattedMessage("globally.show.payment.label")}
                     </Dropdown.Item>
                 ) : null}
-                {isCreatePayment && item.payment_status !== 1 ? (
+                {isCreatePayment && item.remaining_amount > 0 ? (
                     <Dropdown.Item
                         onClick={(e) => {
                             e.stopPropagation();

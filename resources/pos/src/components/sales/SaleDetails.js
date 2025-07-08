@@ -21,6 +21,7 @@ import {
     faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import TopProgressBar from "../../shared/components/loaders/TopProgressBar";
+import moment from "moment";
 
 const SaleDetails = (props) => {
     const {
@@ -373,6 +374,140 @@ const SaleDetails = (props) => {
                                                                         .value
                                                                         .currency_symbol,
                                                                 details.sub_total
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            }
+                                        )}
+                                </tbody>
+                            </Table>
+                        </div>
+                        <div className="mt-5 col-6">
+                            <h5 className="text-gray-600 bg-light p-4 mb-5 text-uppercase">
+                                {getFormattedMessage("Payments")}
+                            </h5>
+                            <Table responsive>
+                                <thead>
+                                    <tr>
+                                        <th className="ps-3">
+                                            {getFormattedMessage("Pay Date")}
+                                        </th>
+                                        <th className="ps-3">
+                                            {getFormattedMessage(
+                                                "Payment Type"
+                                            )}
+                                        </th>
+                                        <th className="ps-3">
+                                            {getFormattedMessage("Paid Amount")}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {saleDetails.payments &&
+                                        saleDetails.payments.map(
+                                            (details, index) => {
+                                                return (
+                                                    <tr
+                                                        key={index}
+                                                        className="align-middle"
+                                                    >
+                                                        <td>
+                                                            {details.payment_date ? (
+                                                                <>
+                                                                    {moment(
+                                                                        details.payment_date
+                                                                    ).format(
+                                                                        "YYYY-MM-DD"
+                                                                    )}
+                                                                </>
+                                                            ) : (
+                                                                <>---</>
+                                                            )}
+                                                        </td>
+                                                        <td>
+                                                            {
+                                                                (details.payment_type &&
+                                                                    details.payment_type ===
+                                                                        1 && (
+                                                                        <span className="badge bg-light-primary">
+                                                                            <span>
+                                                                                {getFormattedMessage(
+                                                                                    "cash.label"
+                                                                                )}
+                                                                            </span>
+                                                                        </span>
+                                                                    )) ||
+                                                                    (details.payment_type ===
+                                                                        2 && (
+                                                                        <span className="badge bg-light-primary">
+                                                                            <span>
+                                                                                {getFormattedMessage(
+                                                                                    "payment-type.filter.cheque.label"
+                                                                                )}
+                                                                            </span>
+                                                                        </span>
+                                                                    )) ||
+                                                                    (details.payment_type ===
+                                                                        3 && (
+                                                                        <span className="badge bg-light-primary">
+                                                                            <span>
+                                                                                {getFormattedMessage(
+                                                                                    "payment-type.filter.bank-transfer.label"
+                                                                                )}
+                                                                            </span>
+                                                                        </span>
+                                                                    )) ||
+                                                                    (details.payment_type ===
+                                                                        4 && (
+                                                                        <span className="badge bg-light-primary">
+                                                                            <span>
+                                                                                {getFormattedMessage(
+                                                                                    "payment-type.filter.other.label"
+                                                                                )}
+                                                                            </span>
+                                                                        </span>
+                                                                    )) ||
+                                                                    (details.payment_type ===
+                                                                        5 && (
+                                                                        <span className="badge bg-light-primary">
+                                                                            <span>
+                                                                                {getFormattedMessage(
+                                                                                    "payment-type.filter.kpay.label"
+                                                                                )}
+                                                                            </span>
+                                                                        </span>
+                                                                    ))
+                                                                // (details.payment_type ===
+                                                                //     6 && (
+                                                                //     <span className="badge bg-light-primary">
+                                                                //         <span>
+                                                                //             {getFormattedMessage(
+                                                                //                 "payment-type.filter.kpay.label"
+                                                                //             )}
+                                                                //         </span>
+                                                                //     </span>
+                                                                // )) ||
+                                                                // (details.payment_type ===
+                                                                //     7 && (
+                                                                //     <span className="badge bg-light-primary">
+                                                                //         <span>
+                                                                //             {getFormattedMessage(
+                                                                //                 "payment-type.filter.aya.label"
+                                                                //             )}
+                                                                //         </span>
+                                                                //     </span>
+                                                                // ))
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            {currencySymbolHandling(
+                                                                allConfigData,
+                                                                frontSetting.value &&
+                                                                    frontSetting
+                                                                        .value
+                                                                        .currency_symbol,
+                                                                details.amount
                                                             )}
                                                         </td>
                                                     </tr>

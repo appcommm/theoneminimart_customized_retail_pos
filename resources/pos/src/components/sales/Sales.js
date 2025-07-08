@@ -116,9 +116,11 @@ const Sales = (props) => {
             payment_status: sale.attributes.payment_status,
             payment_type: sale.attributes.payment_type,
             grand_total: sale.attributes.grand_total,
-            paid_amount: sale.attributes.paid_amount
-                ? sale.attributes.paid_amount
-                : (0.0).toFixed(2),
+            // paid_amount: sale.attributes.paid_amount
+            //     ? sale.attributes.paid_amount
+            //     : (0.0).toFixed(2),
+            paid_amount: sale.attributes.received_amount ?? 0,
+            remaining_amount: sale.attributes.remaining_amount ?? 0,
             id: sale.id,
             currency: currencySymbol,
             is_return: sale.attributes.is_return,
@@ -280,6 +282,36 @@ const Sales = (props) => {
             },
             sortable: true,
         },
+
+        {
+            name: getFormattedMessage(
+                // "dashboard.recentSales.paid.label"
+                "Remaining Amount"
+            ),
+            sortField: "remaining_amount",
+            cell: (row) => {
+                return row.reference_code === "Total" ? (
+                    <></>
+                ) : (
+                    <span
+                        className={`badge ${
+                            row.remaining_amount == 0
+                                ? "bg-light-success"
+                                : " bg-light-warning"
+                        }`}
+                    >
+                        <span>
+                            {currencySymbolHandling(
+                                allConfigData,
+                                row.currency,
+                                row.remaining_amount
+                            )}
+                        </span>
+                    </span>
+                );
+            },
+            sortable: true,
+        },
         {
             name: getFormattedMessage(
                 "dashboard.recentSales.paymentStatus.label"
@@ -288,16 +320,17 @@ const Sales = (props) => {
             sortable: false,
             cell: (row) => {
                 return (
-                    (row.payment_status === 1 && (
-                        <span className="badge bg-light-success">
-                            <span>
-                                {getFormattedMessage(
-                                    "payment-status.filter.paid.label"
-                                )}
+                    (row.remaining_amount === 0 &&
+                        row.grand_total === row.paid_amount && (
+                            <span className="badge bg-light-success">
+                                <span>
+                                    {getFormattedMessage(
+                                        "payment-status.filter.paid.label"
+                                    )}
+                                </span>
                             </span>
-                        </span>
-                    )) ||
-                    (row.payment_status === 2 && (
+                        )) ||
+                    (row.grand_total === row.remaining_amount && (
                         <span className="badge bg-light-danger">
                             <span>
                                 {getFormattedMessage(
@@ -306,16 +339,17 @@ const Sales = (props) => {
                             </span>
                         </span>
                     )) ||
-                    (row.payment_status === 3 && (
-                        <span className="badge bg-light-warning">
-                            {/*<span>{getFormattedMessage("payment-status.filter.unpaid.label")}</span>*/}
-                            <span>
-                                {getFormattedMessage(
-                                    "payment-status.filter.partial.label"
-                                )}
+                    (row.received_amount !== 0 &&
+                        row.grand_total !== row.paid_amount && (
+                            <span className="badge bg-light-warning">
+                                {/*<span>{getFormattedMessage("payment-status.filter.unpaid.label")}</span>*/}
+                                <span>
+                                    {getFormattedMessage(
+                                        "payment-status.filter.partial.label"
+                                    )}
+                                </span>
                             </span>
-                        </span>
-                    ))
+                        ))
                 );
             },
         },

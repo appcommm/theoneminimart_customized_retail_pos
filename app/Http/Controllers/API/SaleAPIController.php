@@ -179,7 +179,7 @@ class SaleAPIController extends AppBaseController
 
     public function saleInfo(Sale $sale): JsonResponse
     {
-        $sale = $sale->load('saleItems.product', 'warehouse', 'customer');
+        $sale = $sale->load('saleItems.product', 'warehouse', 'customer','payments');
         $keyName = [
             'email', 'company_name', 'phone', 'address',
         ];

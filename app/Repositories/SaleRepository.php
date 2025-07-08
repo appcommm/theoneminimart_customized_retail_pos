@@ -75,12 +75,20 @@ class SaleRepository extends BaseRepository
             $input['date'] = $input['date'] ?? date('Y/m/d');
             $input['is_sale_created'] = $input['is_sale_created'] ?? false;
             $QuotationId = $input['quotation_id'] ?? false;
+            $input['paid_amount'] = $input['received_amount'];
+            if ($input['payment_status'] == 2) {
+                $input['paid_amount'] = 0;
+                $input['received_amount'] = 0;
+                $input['remaining_amount'] = $input['grand_total'];
+            }
             $saleInputArray = Arr::only($input, [
                 'customer_id', 'warehouse_id', 'tax_rate', 'tax_amount', 'discount', 'shipping', 'grand_total',
-                'received_amount', 'paid_amount', 'payment_type', 'note', 'date', 'status', 'payment_status',
+                'received_amount', 'paid_amount', 'payment_type', 'note', 'date', 'status', 'payment_status','remaining_amount'
             ]);
 
             $saleInputArray['user_id'] = Auth::id();
+            $saleInputArray['paid_amount'] = $input['received_amount'];
+
             /** @var Sale $sale */
             $sale = Sale::create($saleInputArray);
             if ($input['is_sale_created'] && $QuotationId) {
@@ -290,7 +298,7 @@ class SaleRepository extends BaseRepository
         }
 
         if ($input['payment_status'] == Sale::PAID) {
-            $input['paid_amount'] = $input['grand_total'];
+            $input['paid_amount'] = $input['received_amount'];
             SalesPayment::create([
                 'sale_id' => $sale->id,
                 'payment_date' => Carbon::now(),

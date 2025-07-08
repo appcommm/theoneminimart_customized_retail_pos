@@ -75,6 +75,8 @@ class SalesPaymentRepository extends BaseRepository
             }
 
             $sale->update([
+                'received_amount' => $sale->received_amount + $input['amount'],
+                'remaining_amount' => $sale->remaining_amount - $input['amount'],
                 'payment_status' => $paymentStatus,
                 'paid_amount' => $paidAmount,
                 'payment_type' => $input['payment_type'],

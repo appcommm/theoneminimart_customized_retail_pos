@@ -40,8 +40,10 @@ const CashPaymentModel = (props) => {
 
     useEffect(() => {
         cashPaymentValue.received_amount !== undefined
-            ? setSummation(cashPaymentValue.received_amount - grandTotal)
+            ? setSummation(grandTotal - cashPaymentValue.received_amount)
             : setSummation(summation);
+        cashPaymentValue.remaining_amount =
+            grandTotal - cashPaymentValue.received_amount;
     }, [cashPaymentValue.received_amount, grandTotal]);
 
     useEffect(() => {
@@ -89,7 +91,9 @@ const CashPaymentModel = (props) => {
                                 <Form.Control
                                     type="text"
                                     min={0}
-                                    onKeyPress={(event) => numFloatValidate(event)}
+                                    onKeyPress={(event) =>
+                                        numFloatValidate(event)
+                                    }
                                     name="received_amount"
                                     autoComplete="off"
                                     className="form-control-solid"
@@ -116,7 +120,8 @@ const CashPaymentModel = (props) => {
                             <Form.Group className="mb-3 col-6">
                                 <Form.Label>
                                     {getFormattedMessage(
-                                        "pos.change-return.label"
+                                        // "pos.change-return.label"
+                                        "Balance"
                                     )}{" "}
                                     :{" "}
                                 </Form.Label>
@@ -325,25 +330,26 @@ const CashPaymentModel = (props) => {
                     type="button"
                     className="btn btn-primary"
                     onClick={(event) => {
-                        if (cashPaymentValue.received_amount !== undefined) {
-                            if (
-                                parseInt(cashPaymentValue.received_amount) <
-                                parseInt(grandTotal)
-                            ) {
-                                dispatch(
-                                    addToast({
-                                        text: getFormattedMessage(
-                                            "purchase.less.recieving.ammout.error"
-                                        ),
-                                        type: toastType.ERROR,
-                                    })
-                                );
-                            } else {
-                                onCashPayment(event);
-                            }
-                        } else {
-                            onCashPayment(event);
-                        }
+                        // if (cashPaymentValue.received_amount !== undefined) {
+                        //     if (
+                        //         parseInt(cashPaymentValue.received_amount) <
+                        //         parseInt(grandTotal)
+                        //     ) {
+                        //         dispatch(
+                        //             addToast({
+                        //                 text: getFormattedMessage(
+                        //                     "purchase.less.recieving.ammout.error"
+                        //                 ),
+                        //                 type: toastType.ERROR,
+                        //             })
+                        //         );
+                        //     } else {
+                        //         onCashPayment(event);
+                        //     }
+                        // } else {
+                        //     onCashPayment(event);
+                        // }
+                        onCashPayment(event);
                     }}
                 >
                     {getFormattedMessage("globally.submit-btn")}
@@ -366,10 +372,10 @@ const CashPaymentModel = (props) => {
                                     })
                                 );
                             } else {
-                                onCashPayment(event,true);
+                                onCashPayment(event, true);
                             }
                         } else {
-                            onCashPayment(event,true);
+                            onCashPayment(event, true);
                         }
                     }}
                 >

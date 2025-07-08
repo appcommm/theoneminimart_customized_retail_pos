@@ -114,6 +114,7 @@ class Sale extends BaseModel implements HasMedia, JsonResourceful
         'barcode_symbol',
         'is_return',
         'user_id',
+        'remaining_amount'
     ];
 
     public static $rules = [
@@ -214,6 +215,7 @@ class Sale extends BaseModel implements HasMedia, JsonResourceful
             'shipping' => $this->shipping,
             'grand_total' => $this->grand_total,
             'received_amount' => $this->received_amount,
+            'remaining_amount' => $this->remaining_amount,
             'paid_amount' => $this->paid_amount,
             'due_amount' => $this->dueAmount($this->id),
             'payment_type' => $this->payment_type,
@@ -239,6 +241,7 @@ class Sale extends BaseModel implements HasMedia, JsonResourceful
             'due_amount' => $this->dueAmount($this->id),
             'payment_status' => $this->payment_status,
             'status' => $this->status,
+            'remaining_amount' => $this->remaining_amount,
         ];
 
         return $fields;
