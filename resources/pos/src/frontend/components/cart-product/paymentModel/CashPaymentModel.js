@@ -38,12 +38,28 @@ const CashPaymentModel = (props) => {
     const [summation, setSummation] = useState(0);
     const dispatch = useDispatch();
 
+    // useEffect(() => {
+    //     cashPaymentValue.received_amount !== undefined
+    //         ? setSummation(grandTotal - cashPaymentValue.received_amount)
+    //         : setSummation(summation);
+    //     cashPaymentValue.remaining_amount =
+    //         grandTotal - cashPaymentValue.received_amount;
+    // }, [cashPaymentValue.received_amount, grandTotal]);
     useEffect(() => {
-        cashPaymentValue.received_amount !== undefined
-            ? setSummation(grandTotal - cashPaymentValue.received_amount)
-            : setSummation(summation);
-        cashPaymentValue.remaining_amount =
-            grandTotal - cashPaymentValue.received_amount;
+        const total = parseFloat(grandTotal) || 0;
+        let received = cashPaymentValue.received_amount;
+
+        // Only apply default if it's undefined or empty string, NOT if 0
+        if (received === undefined || received === "") {
+            received = total;
+            cashPaymentValue.received_amount = total;
+        }
+
+        const receivedNum = parseFloat(received) || 0;
+        const remaining = total - receivedNum;
+
+        setSummation(remaining);
+        cashPaymentValue.remaining_amount = remaining;
     }, [cashPaymentValue.received_amount, grandTotal]);
 
     useEffect(() => {
@@ -61,6 +77,7 @@ const CashPaymentModel = (props) => {
             };
         }
     );
+    console.log(cashPaymentValue, "cahspaymentValue");
 
     return (
         <Modal
@@ -358,25 +375,26 @@ const CashPaymentModel = (props) => {
                     type="button"
                     className="btn btn-primary"
                     onClick={(event) => {
-                        if (cashPaymentValue.received_amount !== undefined) {
-                            if (
-                                parseInt(cashPaymentValue.received_amount) <
-                                parseInt(grandTotal)
-                            ) {
-                                dispatch(
-                                    addToast({
-                                        text: getFormattedMessage(
-                                            "purchase.less.recieving.ammout.error"
-                                        ),
-                                        type: toastType.ERROR,
-                                    })
-                                );
-                            } else {
-                                onCashPayment(event, true);
-                            }
-                        } else {
-                            onCashPayment(event, true);
-                        }
+                        // if (cashPaymentValue.received_amount !== undefined) {
+                        //     if (
+                        //         parseInt(cashPaymentValue.received_amount) <
+                        //         parseInt(grandTotal)
+                        //     ) {
+                        //         dispatch(
+                        //             addToast({
+                        //                 text: getFormattedMessage(
+                        //                     "purchase.less.recieving.ammout.error"
+                        //                 ),
+                        //                 type: toastType.ERROR,
+                        //             })
+                        //         );
+                        //     } else {
+                        //         onCashPayment(event, true);
+                        //     }
+                        // } else {
+                        //     onCashPayment(event, true);
+                        // }
+                        onCashPayment(event, true);
                     }}
                 >
                     {getFormattedMessage("globally.submit-and-print-btn")}

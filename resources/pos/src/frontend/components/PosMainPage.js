@@ -111,6 +111,8 @@ const PosMainPage = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    console.log(cashPaymentValue, "cashPaymentValue");
+
     //total Qty on cart item
     const localCart = updateProducts.map((updateQty) =>
         Number(updateQty.quantity)
