@@ -98,21 +98,56 @@ class WarehouseAPIController extends AppBaseController
         return $this->sendSuccess('Warehouse deleted successfully');
     }
 
-    public function warehouseReport(Request $request)
-    {
-        $report = [];
-        if ($request->get('warehouse_id') && ! empty($request->get('warehouse_id')) && $request->get('warehouse_id') != 'null') {
-            $report['sale_count'] = Sale::whereWarehouseId($request->get('warehouse_id'))->count();
-            $report['purchase_count'] = Purchase::whereWarehouseId($request->get('warehouse_id'))->count();
-            $report['sale_return_count'] = SaleReturn::whereWarehouseId($request->get('warehouse_id'))->count();
-            $report['purchase_return_count'] = PurchaseReturn::whereWarehouseId($request->get('warehouse_id'))->count();
-        } else {
-            $report['sale_count'] = Sale::count();
-            $report['purchase_count'] = Purchase::count();
-            $report['sale_return_count'] = SaleReturn::count();
-            $report['purchase_return_count'] = PurchaseReturn::count();
-        }
+    // public function warehouseReport(Request $request)
+    // {
+    //     $report = [];
+    //     if ($request->get('warehouse_id') && ! empty($request->get('warehouse_id')) && $request->get('warehouse_id') != 'null') {
+    //         $report['sale_count'] = Sale::whereWarehouseId($request->get('warehouse_id'))->count();
+    //         $report['purchase_count'] = Purchase::whereWarehouseId($request->get('warehouse_id'))->count();
+    //         $report['sale_return_count'] = SaleReturn::whereWarehouseId($request->get('warehouse_id'))->count();
+    //         $report['purchase_return_count'] = PurchaseReturn::whereWarehouseId($request->get('warehouse_id'))->count();
+    //     } else {
+    //         $report['sale_count'] = Sale::count();
+    //         $report['purchase_count'] = Purchase::count();
+    //         $report['sale_return_count'] = SaleReturn::count();
+    //         $report['purchase_return_count'] = PurchaseReturn::count();
+    //     }
 
-        return $this->sendResponse($report, '');
+    //     return $this->sendResponse($report, '');
+    // }
+
+    public function warehouseReport(Request $request)
+{
+    $report = [];
+
+    $warehouseId = $request->get('warehouse_id');
+    $fromDate = $request->get('from_date');
+    $toDate = $request->get('to_date');
+
+    // Base query with optional date filtering
+    $applyDateFilter = function ($query) use ($fromDate, $toDate) {
+        if ($fromDate) {
+            $query->whereDate('created_at', '>=', $fromDate);
+        }
+        if ($toDate) {
+            $query->whereDate('created_at', '<=', $toDate);
+        }
+        return $query;
+    };
+
+    if ($warehouseId && $warehouseId !== 'null') {
+        $report['sale_count'] = $applyDateFilter(Sale::where('warehouse_id', $warehouseId))->count();
+        $report['purchase_count'] = $applyDateFilter(Purchase::where('warehouse_id', $warehouseId))->count();
+        $report['sale_return_count'] = $applyDateFilter(SaleReturn::where('warehouse_id', $warehouseId))->count();
+        $report['purchase_return_count'] = $applyDateFilter(PurchaseReturn::where('warehouse_id', $warehouseId))->count();
+    } else {
+        $report['sale_count'] = $applyDateFilter(Sale::query())->count();
+        $report['purchase_count'] = $applyDateFilter(Purchase::query())->count();
+        $report['sale_return_count'] = $applyDateFilter(SaleReturn::query())->count();
+        $report['purchase_return_count'] = $applyDateFilter(PurchaseReturn::query())->count();
     }
+
+    return $this->sendResponse($report, '');
+}
+
 }

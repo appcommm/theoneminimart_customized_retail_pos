@@ -37,14 +37,20 @@ const WarehouseReport = (props) => {
         value: null,
     });
     const [key, setKey] = useState("sales");
+    const [fromDate, setFromDate] = useState("");
+    const [toDate, setToDate] = useState("");
 
     useEffect(() => {
         fetchAllWarehouses();
     }, []);
 
+    // useEffect(() => {
+    //     fetchWarehouseReport(warehouseValue.value);
+    // }, [warehouseValue]);
+
     useEffect(() => {
-        fetchWarehouseReport(warehouseValue.value);
-    }, [warehouseValue]);
+        fetchWarehouseReport(warehouseValue.value, fromDate, toDate);
+    }, [warehouseValue, fromDate, toDate]);
 
     const onWarehouseChange = (obj) => {
         setWarehouseValue(obj);
@@ -83,6 +89,27 @@ const WarehouseReport = (props) => {
                     />
                 )}
             </Col>
+            <Row className="mb-4">
+                <Col md={4} className="mx-auto mb-3">
+                    <label>{getFormattedMessage("From")}</label>
+                    <input
+                        type="date"
+                        className="form-control"
+                        value={fromDate}
+                        onChange={(e) => setFromDate(e.target.value)}
+                    />
+                </Col>
+                <Col md={4} className="mx-auto mb-3">
+                    <label>{getFormattedMessage("To")}</label>
+                    <input
+                        type="date"
+                        className="form-control"
+                        value={toDate}
+                        onChange={(e) => setToDate(e.target.value)}
+                    />
+                </Col>
+            </Row>
+
             <Row className="g-4">
                 <Widget
                     title={getFormattedMessage("sales.title")}

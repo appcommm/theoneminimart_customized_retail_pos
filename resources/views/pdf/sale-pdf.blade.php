@@ -117,7 +117,7 @@
 
         <!-- Header Section with Logo and Company Info -->
         <div class="header-section">
-            <img src="{{ asset('images/16.png') }}" alt="Company Logo" width="380px" />
+            <img src="{{ asset('images/16.png') }}" alt="Company Logo" width="190px" />
             <!-- <p>{{ getSettingValue('address') }}</p> -->
             <!-- <p>Phone Number: {{ getSettingValue('phone') }}</p> -->
         </div>
